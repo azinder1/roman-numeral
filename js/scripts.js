@@ -1,35 +1,42 @@
-var numerals = ["I","IV","V","IX","X","XL","L","XC","C","CD","D","CM","M"];
-var numbers = ['1', '4', '5', '9', '10', '40', '50', '90', '100', '400', '500', '900'
-, '1000'];
+var numerals = [["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"],
+                ["", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"],
+                ["", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"],
+                ["", "M", "MM", "MMM"]];
+var repArray= [];
+
+
 
 var numberConverter = function (input) {
-  var sum = "";
-  var inputToString = input.toString();
-  //var reverseInput = input.reverse()
-  if (input >= 4000 || input <=0 || isNaN(input)) {
-    alert("this is not a number between 1 and 3999")
+  var reverseInput = input.split('').reverse();
+  for (var idx = 0; idx < reverseInput.length; idx ++) {
+    var things = numerals[idx][parseInt(reverseInput[idx])];
+    repArray.push(things);
   }
-  else if (numbers.indexOf(inputToString) > -1) {
-    for (var idx = 0; idx < numbers.length; idx ++) {
-      if (inputToString === numbers[idx]) {
-        sum = sum.concat(numerals[idx]);
-        inputToString = inputToString.replace(numbers[idx],"");
-        alert(inputToString)
-      }
-    }
-    alert(sum);
-  }
-  else{
-    alert('this is not passing')
-  }
+  return (repArray.reverse().join(""));
 };
 
 
+// var numberConverter=function romanize(num) {
+//   var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},roman = '',i;
+//   for ( i in lookup ) {
+//     while ( num >= lookup[i] ) {
+//       roman += i;
+//       num -= lookup[i];
+//     }
+//   }
+//   return roman;
+// }
 
 $(function(){
   $('.blanks form').submit(function(event){
     event.preventDefault();
-    var inputNumber = parseInt($('input#numbers').val());
+    var inputNumber = $('input#numbers').val();
+    var intInput = parseInt(inputNumber);
     var convertedNumber = numberConverter(inputNumber);
+    if (intInput >= 4000 || intInput <=0 || isNaN(intInput)) {
+      alert("this is not a number between 1 and 3999")
+    } else {
+      $('#output h5').text(convertedNumber);
+    }
   });
 });
